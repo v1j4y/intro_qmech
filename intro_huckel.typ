@@ -256,8 +256,10 @@ cetz.canvas({
   content( (-1,2), "V=∞")
   content( ( 5,2), "V=∞")
   content( ( 2,2), "V=0")
-  line((0, -0.5), (4.0, -0.5), stroke: (thickness: 4pt), name: "base", mark: (begin: "<"))
-  content( (2,-1), "L")
+  line((0, -1.0), (4.0, -1.0), stroke: (thickness: 4pt), name: "base", mark: (begin: "<"))
+  content( (2,-1.5), "L")
+  circle((2,0), radius: 3pt, fill: black)
+  content( (2,-0.5), "O")
 }),
 caption: [Particle in an infinite potential well.]
 ) <fig:partin1dbox>
@@ -336,11 +338,128 @@ for the problem of particle in a box.
 
 The eigenvectors with $n=16$ is shown in @fig:eigen1.
 
+#figure(
+   image("laplace_n16.png", width: 350pt),
+   caption: [The solution of the Laplace equation with $n=16$ points.],
+ ) <fig:eigen1>
+
+As one can see, the boundary values are not 
+consistent with the boundary conditions defined for the 
+problem in @eq:part1. 
+This is due to the finite step size (i.e. $epsilon$) and
+depends on the number of points chosen for the discretization.
+Increasing the number of points from $n=16$ to $n=1024$
+gives a much better agreement to the bounday values defined above.
 
 #figure(
-   image("laplace_n16.png"),
-   caption: [here comes text],
- ) <fig:eigen1>
+   image("laplace_n1024.png", width: 350pt),
+   caption: [The solution of the Laplace equation with $n=1024$ points.],
+ ) <fig:eigen2>
+
+Since the solutions $psi_i$ are eigenfunction of the
+laplacian operator, they are by definition orthonormalized.
+
+$
+braket(psi_i , psi_i) &= 1, forall i \
+braket(psi_i , psi_j) &= 0, forall i,j
+$ <eq:part7>
+
+Since we are here in real space, i.e. real coordinates $x$, 
+the overlap (also known as the measure) is defined as simply
+the integral @eq:part8.
+
+$
+braket(psi(x), psi(x)) = integral_0^1 psi(x)^(dagger) psi(x) d x
+$ <eq:part8>
+
+where $psi(x)^(dagger)$ is the complex conjugate of $psi(x)$.
+Here, since the laplacian $T$ is hermitian (i.e. $T^(dagger) = T$),
+the eigenvalues are real.
+
+In the present case, where we have used a numerical method
+to perform the integration, we can also perform the integral
+numerically as shown in @eq:part9.
+
+$
+integral_0^1 psi(x)^dagger psi(x) d x = sum_k^N psi_i^dagger (k)psi_i (k)  = 1
+$ <eq:part9>
+
+where $N$ is the total number of points. Similarly,
+the orthogonality constraint says that @eq:part10 holds.
+
+$
+integral_0^1 psi(x)^dagger psi(x) d x = sum_k^N psi_i^dagger (k)psi_j (k)  = 0
+$ <eq:part10>
+
+As can be easily verified using basic linear algebra.
+
+== Probability density
+
+The eigenvectors obtained in the previous section $psi(x)$,
+can be used to plot the probability density for the various
+states as given by @eq:part11.
+
+$
+rho(x) = psi(x)^dagger psi(x)
+$ <eq:part11>
+
+Numerically, this can be written as the dot product
+between the wavefunction as shown in @eq:part12.
+
+$
+rho_i = sum_k psi_i (k) psi_i (k)
+$ <eq:part12>
+
+where we have assumed that the wavefunction $psi(x)$ is real.
+The probability density can be shown to be positive everywhere
+and defines the nodes of the state, i.e. the regions where
+the probability of finding the particle is zero as shown in 
+@fig:part1.
+
+#figure(
+   image("density_n1024.png", width: 350pt),
+   caption: [The solution of the Laplace equation with $n=1024$ points.],
+  ) <fig:part1>
+
+The ground state has zero nodes, the first excited state has 
+exactly one node, the second excited state has two nodes etc.
+In general, the nodes of the function increase with increasing
+energy compared to the ground state.
+
+== Dipole moment and transition dipole moment
+
+The dipole moment operator for a given state
+is given as shown below @eq:part13.
+
+$
+angle.l x_i angle.r = integral_0^1 rho(x) x d x
+$ <eq:part13>
+
+The transition dipole moment between two states
+$i$ and $j$ is defined as shown in @eq:part14.
+
+$
+angle.l x_(i j) angle.r = integral_0^1 psi_i(x) x psi_j(x) d x
+$ <eq:part14>
+
+The table @fig:table1 shows the 
+dipole moment for the first state and the transition dipole 
+between the ground and first excited state.
+
+ #figure(
+   table( columns: (auto, auto), inset: 10pt, align: center, 
+ [$alpha$], [$angle.l x angle.r_(Psi^2)$],
+ [1,1], [ 0.000489237   ],
+ [1,2], [-0.180655      ],
+ [1,3], [ 0.0           ],
+ [2,2], [ 0.000489237   ],
+ [2,3], [ 0.195108      ],
+ ),
+   caption: [The dipole moment and transition dipole moment
+between the pairs of states shown in the first column.],
+ ) <fig:table1>
+ 
+
 
 = Second quantization
 
