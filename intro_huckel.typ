@@ -448,12 +448,12 @@ between the ground and first excited state.
 
  #figure(
    table( columns: (auto, auto), inset: 10pt, align: center, 
- [$alpha$], [$angle.l x angle.r_(Psi^2)$],
- [1,1], [ 0.000489237   ],
- [1,2], [-0.180655      ],
- [1,3], [ 0.0           ],
- [2,2], [ 0.000489237   ],
- [2,3], [ 0.195108      ],
+ [$(i,j)$], [$angle.l x angle.r_(Psi^2)$],
+ [(1,1)], [ 0.000489237   ],
+ [(1,2)], [-0.180655      ],
+ [(1,3)], [ 0.0           ],
+ [(2,2)], [ 0.000489237   ],
+ [(2,3)], [ 0.195108      ],
  ),
    caption: [The dipole moment and transition dipole moment
 between the pairs of states shown in the first column.],
