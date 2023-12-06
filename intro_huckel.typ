@@ -1,5 +1,6 @@
 #import "template.typ": project
 #import "@preview/physica:0.8.1": *
+#import "@preview/cetz:0.1.2"
 
 #show: project.with(
   title: "Introduction to Model hamiltonians",
@@ -140,7 +141,7 @@ deriavtive $dot(r)(t)$, i.e. @eq:postul2.
 
 $
 phi(x_k,t) = lim_(epsilon arrow.r 0) integral_R 
-exp( frac(i,planck.reduce) sum_i S[r(t)_i]) ...frac(d x_(i-1), A) frac(d x_(i-2), A)...
+exp( frac(i,hbar) sum_i S[r(t)_i]) ...frac(d x_(i-1), A) frac(d x_(i-2), A)...
 $ <eq:postul2>
 
 where the integral is over the region $R$ which
@@ -154,7 +155,7 @@ time $t$ to time $t+epsilon$ (@eq:deriv7).
 
 $
 phi(x_(k+1), t + epsilon) = lim_(epsilon arrow.r 0) integral_R 
-exp( frac(i,planck.reduce) sum_i S[r(t)_i]) ...frac(d x_(i), A) frac(d x_(i-1), A)...
+exp( frac(i,hbar) sum_i S[r(t)_i]) ...frac(d x_(i), A) frac(d x_(i-1), A)...
 $ <eq:deriv7>
 
 Using the definition of $phi(x_k, t)$ given in @eq:postul2,
@@ -183,14 +184,14 @@ Expanding the wavefunction $phi(x_(k+1),t)$ around $x_k$ using the
 taylor series gives,
 
 $
-phi(x_(k+1),t+epsilon) =\  exp(frac(-i epsilon V, planck.reduce)) times integral exp(frac(i epsilon xi^2,2 planck.reduce epsilon))[psi(x, t) - xi pdv(psi(x,t),x)  + frac(xi^2,2) pdv(psi(x,t),x,2) - ...] (d xi)/A
+phi(x_(k+1),t+epsilon) =\  exp(frac(-i epsilon V, hbar)) times integral exp(frac(i epsilon xi^2,2 hbar epsilon))[psi(x, t) - xi pdv(psi(x,t),x)  + frac(xi^2,2) pdv(psi(x,t),x,2) - ...] (d xi)/A
 $ <eq:deriv11>
 
 where, $x_(k+1) - x_k = xi$. Expanding the left hand
 also around $xi$ gives.
 
 $
-phi(x_(k+1),t) + epsilon pdv(phi(x,t),t)= \ exp(frac(-i epsilon V, planck.reduce)) times integral exp(frac(i epsilon xi^2,2 planck.reduce epsilon))[psi(x, t) - xi pdv(psi(x,t),x)  + frac(xi^2,2) pdv(psi(x,t),x,2) - ...] (d xi)/A
+phi(x_(k+1),t) + epsilon pdv(phi(x,t),t)= \ exp(frac(-i epsilon V, hbar)) times integral exp(frac(i epsilon xi^2,2 hbar epsilon))[psi(x, t) - xi pdv(psi(x,t),x)  + frac(xi^2,2) pdv(psi(x,t),x,2) - ...] (d xi)/A
 $ <eq:deriv12>
 
 The factors in the integrand on the right of
@@ -199,16 +200,16 @@ zero because they are odd integrals (@eq:deriv13).
 
 $
 
-phi(x_(k+1),t) + epsilon pdv(phi(x,t),t)= \ exp(frac(-i epsilon V, planck.reduce)) times 
-sqrt(2 pi planck.reduce i /m)/A [  psi(x, t) + frac(planck.reduce epsilon i,2 m) pdv(psi(x,t),x,2) + ...] 
+phi(x_(k+1),t) + epsilon pdv(phi(x,t),t)= \ exp(frac(-i epsilon V, hbar)) times 
+sqrt(2 pi hbar i /m)/A [  psi(x, t) + frac(hbar epsilon i,2 m) pdv(psi(x,t),x,2) + ...] 
 $ <eq:deriv13>
 
 Finally, equating the terms of same order in $epsilon$,
 we get @eq:deriv14
 
 $
--planck.reduce/i pdv(psi,t) &= 1/(2 m) (planck.reduce/i pdv(,x) )^2 psi + V(x) psi \
--planck.reduce/i pdv(psi,t) &= H psi
+-hbar/i pdv(psi,t) &= 1/(2 m) (hbar/i pdv(,x) )^2 psi + V(x) psi \
+-hbar/i pdv(psi,t) &= H psi
 $ <eq:deriv14>
 
 The above equation can be compared to the 
@@ -223,11 +224,123 @@ $ <eq:deriv15>
 = 1D particle in a box
 
 The problem of a particle in a box can be defined
-as shown in @eq:part1
+as shown in @fig:partin1dbox. The position of the particle inside the box
+can be defined via the wavefunction $psi(x)$. 
+The particle is inside a box with infinitely large walls. 
+Therefore,
+the probability of finding the particle on the wall
+is zero. These constitute the boundary conditions
+for for the wavefunction of the particle $psi(x)$, i.e. @eq:part1.
 
 $
-frac(d^2 psi, d x^2) = lambda psi
+psi(0) &= 0 \
+psi(L) &= 0 
 $ <eq:part1>
+
+#figure(
+cetz.canvas({
+  import cetz.draw: *
+  // Your drawing code goes here
+  line((0, 0), (4.0, 0), stroke: (thickness: 4pt), name: "base")
+  place-marks(
+    line((0.0, -0.07), (0.0, 4.0), stroke: (thickness: 4pt)),
+    (mark: ">", size: .7, pos: 1),
+    fill: black
+  )
+  place-marks(
+    line((4.0, -0.07), (4.0, 4.0), stroke: (thickness: 4pt)),
+    (mark: ">", size: .7, pos: 1),
+    fill: black
+  )
+  circle((2,1), radius: 3pt, fill: red)
+  content( (-1,2), "V=∞")
+  content( ( 5,2), "V=∞")
+  content( ( 2,2), "V=0")
+  line((0, -0.5), (4.0, -0.5), stroke: (thickness: 4pt), name: "base", mark: (begin: "<"))
+  content( (2,-1), "L")
+}),
+caption: [Particle in an infinite potential well.]
+) <fig:partin1dbox>
+
+
+== Finite difference equations
+
+The schrodinger equation is given as shown in @eq:part2. 
+
+$
+grad^2 psi(x) = frac(d^2 psi,d x^2) = lambda psi(x)
+$ <eq:part2>
+
+Here, $lambda$ represents the eigenvalues and $psi$ the 
+eigenvectors of the hamiltonian. The @eq:part2 is 
+a second order differential equation also known
+as the one dimensional Laplace equation or 
+the Poisson equation. This equation can 
+be solved using numerical integration techniques.
+Using Taylor series expansion of @eq:part2, one can 
+obtain the finite difference formulae to evaluate the
+derivative at point $x_i$.
+
+$
+lr(frac(d psi,d x) bar)_(x_i) &= lim_(epsilon arrow.r 0) ( psi(x_i + epsilon/2) - psi(x_i - epsilon/2) ) / (epsilon) \
+lr(frac(d psi,d x) bar)_(x_i+epsilon/2) &= lim_(epsilon arrow.r 0) ( psi(x_i + epsilon) - psi(x_i) ) / (epsilon) \
+lr(frac(d psi,d x) bar)_(x_i-epsilon/2) &= lim_(epsilon arrow.r 0) ( psi(x_i) - psi(x_i - epsilon) ) / (epsilon) \
+lr(frac(d^2 psi,d x^2) bar)_(x_i) &= lim_(epsilon arrow.r 0) ( psi'(x_i + epsilon/2) - psi'(x_i - epsilon/2) ) / (epsilon) \
+lr(frac(d^2 psi,d x^2) bar)_(x_i) &= lim_(epsilon arrow.r 0) ( psi(x_i + epsilon) - 2psi(x_i) + psi(x_i - epsilon) ) / (epsilon^2) 
+$ <eq:part3>
+
+The above operator on the right hand side of @eq:part3 
+(called $T$ ) can be used to write the finite difference
+form of the schrodinger equation @eq:part2.
+This finite difference form shown in @eq:part4 can be
+used to find the eigenvalues and eigenvectors of the 
+schrodinger equation by dividing the segment into 
+a finite numebr of uniformly distributed points.
+
+$
+T psi (x) = epsilon^2 lambda psi(x)
+$ <eq:part4>
+
+The matrix form of T is shown in @eq:part5 below 
+where one can clearly see the tridiagonal form of the
+Laplace operator.
+
+#let matright(..aa) = math.mat(..aa.pos().map(row => row.map(y => {y; [$&$]})))
+
+$
+T =  
+mat(
+  delim: "[",
+  1,-2, 1, . , ., ., .; 
+  . , 1,-2, 1, ., ., .;
+  . , ., 1,-2, 1, ., .;
+  . , ., ., 1,-2, 1, .;
+  . , ., ., ., 1,-2, 1;
+)
+$ <eq:part5>
+
+The parts not shown in the matrix above are all zeros.
+The finite difference form of the schrodinger equation
+can then be written as @eq:part6.
+
+$
+T psi(x) &= lambda psi(x) \
+(T - lambda) psi(x) &= 0 
+$ <eq:part6>
+
+The matrix above can be diagonalized using the Lanczos
+or other algorithms to obtain the eigenvalues and eigenvectors 
+for the problem of particle in a box.
+
+== Eigenvalues and eigenvectors
+
+The eigenvectors with $n=16$ is shown in @fig:eigen1.
+
+
+#figure(
+   image("laplace_n16.png"),
+   caption: [here comes text],
+ ) <fig:eigen1>
 
 = Second quantization
 
