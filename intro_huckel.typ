@@ -1,6 +1,7 @@
 #import "template.typ": project
 #import "@preview/physica:0.8.1": *
 #import "@preview/cetz:0.1.2"
+#import "@preview/showybox:2.0.1": showybox
 
 #show: project.with(
   title: "Introduction to Model hamiltonians",
@@ -42,7 +43,44 @@ L = T - V
 $ <eq:deriv1>
 
 Where, $T$ is the kinetic energy and $V$ is the 
-potential energy. In order to better understand 
+potential energy. 
+
+//#showybox(
+//  title: "Stokes' theorem",
+//  frame: (
+//    border-color: blue,
+//    title-color: blue.lighten(30%),
+//    body-color: blue.lighten(95%),
+//    footer-color: blue.lighten(80%)
+//  ),
+//  footer: "Information extracted from a well-known public encyclopedia"
+//)[
+//  Let $Sigma$ be a smooth oriented surface in $RR^3$ with boundary $diff Sigma equiv Gamma$. If a vector field $bold(F)(x,y,z)=(F_x (x,y,z), F_y (x,y,z), F_z (x,y,z))$ is defined and has continuous first order partial derivatives in a region containing $Sigma$, then
+//
+//  $ integral.double_Sigma (bold(nabla) times bold(F)) dot bold(Sigma) = integral.cont_(diff Sigma) bold(F) dot dif bold(Gamma) $
+//]
+//
+//// First showybox
+//#showybox(
+//  frame: (
+//    border-color: red.darken(50%),
+//    title-color: red.lighten(60%),
+//    body-color: red.lighten(80%)
+//  ),
+//  title-style: (
+//    color: black,
+//    weight: "regular",
+//    align: center
+//  ),
+//  shadow: (
+//    offset: 3pt,
+//  ),
+//  title: "Red-ish showybox with separated sections!",
+//  lorem(20),
+//  lorem(12)
+//)
+
+In order to better understand 
 the lagrangian and its relation to Newton's 
 equations of motion, in @eq:deriv2, @eq:deriv3 we derive the equations
 of motion in lagrange formulation and its connection
@@ -125,14 +163,42 @@ implies @eq:deriv3.
 == Postulates of Feynman
 
 Feynman put forth two postulates to derive
-the schrodinger equation.
+the schrodinger equation. @feynman1948
+
+#showybox(
+  footer-style: (
+    sep-thickness: 0pt,
+    align: right,
+    color: black
+  ),
+  title: "Feynman's postulates of Quantum Mechanics: Postulate I",
+  footer: [
+    Note that the sum is over all possible paths $r_i (t)$ which 
+    are possible to take from point $r_0$ to $r_1$ in time
+    $t_0$ to $t_1$.
+  ]
+)[
 The first postulate says that the total
 action is the sum of the actions of individual
 paths, i.e. @eq:postul1.
 
 $
-S = sum_i S[r(t)_i]
+S = sum_i S[r_i (t)]
 $ <eq:postul1>
+]
+
+#showybox(
+  footer-style: (
+    sep-thickness: 0pt,
+    align: right,
+    color: black
+  ),
+  title: "Feynman's postulates of Quantum Mechanics: Postulate II",
+  footer: [
+where the integral is over the region $R$ which
+contains all the paths.
+  ]
+)[
 
 The second postulate says that the wavefunction
 $phi$ can be be expressed as an exponential
@@ -141,11 +207,9 @@ deriavtive $dot(r)(t)$, i.e. @eq:postul2.
 
 $
 phi(x_k,t) = lim_(epsilon arrow.r 0) integral_R 
-exp( frac(i,hbar) sum_i S[r(t)_i]) ...frac(d x_(i-1), A) frac(d x_(i-2), A)...
+exp( epsilon frac(i,hbar) sum_i S[r_i (t)]) ...frac(d x_(i-1), A) frac(d x_(i-2), A)...
 $ <eq:postul2>
-
-where the integral is over the region $R$ which
-contains all the paths.
+]
 
 == Derivation
 
@@ -221,6 +285,53 @@ $
 H psi = lambda psi
 $ <eq:deriv15>
 
+= Discretization of the Hamiltonian
+
+The position operator can be written as
+shown in @eq:dis1
+
+$
+hat(q) phi(x) = x phi(x)
+$ <eq:dis1>
+
+Similarly, the momentum operator can be 
+written as given in @eq:dis2.
+
+$
+hat(p) phi(x) = -i pdv(phi(x),x) " " " " (hbar"= 1 in a.u")
+$ <eq:dis2>
+
+Both these operators can be discretized on
+a uniform grid of a fixed number of points 
+separated by a distance $d$ as shown in
+@eq:dis3.
+
+$
+hat(q) phi(x_i) &= x_i phi(x) \
+hat(p) phi(x_i) &= -i frac(phi(x_(i+1)) - phi(x_(i-1)), 2d)
+$ <eq:dis3>
+
+The hamiltonian is then given by the
+square of the momentum operator $p$ 
+@eq:dis4.
+
+$
+hat(H) = hat(p)^2/(2m) = -1/2 pdv(,x,2)
+$ <eq:dis4>
+
+Note that the hamiltonian is real and 
+depends on the coordinate $x$ in this 
+one-dimensional example.
+
+$
+hat(H) = -frac(phi(x_(i+1)) + phi(x_(i-1)) - 2 phi(x_i),2 d^2)
+$ <eq:dis5>
+
+This follows from the fact that the second
+derivative can be discretized using the
+approximation $(f(x_(i+1)) + f(x_(i-1)) - 2 f(x_i)) / d^2$.
+
+
 = 1D particle in a box
 
 The problem of a particle in a box can be defined
@@ -270,7 +381,7 @@ caption: [Particle in an infinite potential well.]
 The schrodinger equation is given as shown in @eq:part2. 
 
 $
-grad^2 psi(x) = frac(d^2 psi,d x^2) = lambda psi(x)
+hat(H)psi(x) = -1/2 grad^2 psi(x) = -1/2 frac(d^2 psi,d x^2) = lambda psi(x)
 $ <eq:part2>
 
 Here, $lambda$ represents the eigenvalues and $psi$ the 
@@ -310,14 +421,14 @@ Laplace operator.
 #let matright(..aa) = math.mat(..aa.pos().map(row => row.map(y => {y; [$&$]})))
 
 $
-T =  
+T = 1/(2 epsilon^2)  
 mat(
   delim: "[",
-  1,-2, 1, . , ., ., .; 
-  . , 1,-2, 1, ., ., .;
-  . , ., 1,-2, 1, ., .;
-  . , ., ., 1,-2, 1, .;
-  . , ., ., ., 1,-2, 1;
+  -1,2, -1, . , ..., ., ., .; 
+  . , -1,2, -1, ..., ., ., .;
+  ... , ..., ..., ...,..., ..., ..., ...;
+  . , ., .,  ., ...,2, -1, .;
+  . , ., .,  ., ..., -1,2, -1;
 )
 $ <eq:part5>
 
@@ -426,38 +537,68 @@ exactly one node, the second excited state has two nodes etc.
 In general, the nodes of the function increase with increasing
 energy compared to the ground state.
 
-== Dipole moment and transition dipole moment
+== Analytic solution
 
-The dipole moment operator for a given state
-is given as shown below @eq:part13.
-
-$
-angle.l x_i angle.r = integral_0^1 rho(x) x d x
-$ <eq:part13>
-
-The transition dipole moment between two states
-$i$ and $j$ is defined as shown in @eq:part14.
+Analytic solution to the problem of 
+particle in a one-dimensional box is of the
+form shown in @eq:ana1.
 
 $
-angle.l x_(i j) angle.r = integral_0^1 psi_i(x) x psi_j(x) d x
-$ <eq:part14>
+psi_k (x) = A_k cos(k x) + B_k sin(k x)
+$ <eq:ana1>
 
-The table @fig:table1 shows the 
-dipole moment for the first state and the transition dipole 
-between the ground and first excited state.
+where, $k$ refers to the state in question.
+The unknowns, $A_k$ and $B_k$ can be 
+found using the boundray conditions and
+the @eq:part2. Using the boundray conditions,
+we get @eq:ana2.
 
- #figure(
-   table( columns: (auto, auto), inset: 10pt, align: center, 
- [$(i,j)$], [$angle.l x angle.r_(Psi^2)$],
- [(1,1)], [ 0.000489237   ],
- [(1,2)], [-0.180655      ],
- [(1,3)], [ 0.0           ],
- [(2,2)], [ 0.000489237   ],
- [(2,3)], [ 0.195108      ],
- ),
-   caption: [The dipole moment and transition dipole moment
-between the pairs of states shown in the first column.],
- ) <fig:table1>
+$
+psi(-L/2) &= psi(L/2) = 0 \
+psi_k (-L/2) &= A_k cos(k L/2) - B_k sin(k L/2) = 0 \
+psi_k ( L/2) &= A_k cos(k L/2) + B_k sin(k L/2) = 0
+$  <eq:ana2>
+
+which gives the final analytical solution as 
+shown in @eq:ana3.
+
+$ psi(x) := cases(
+  sqrt(2/L) sin((n pi )/L x) "if" n "is even",
+  sqrt(2/L) cos((n pi )/L x) "if" n "is odd",
+) $ <eq:ana3>
+
+//== Dipole moment and transition dipole moment
+//
+//The dipole moment operator for a given state
+//is given as shown below @eq:part13.
+//
+//$
+//angle.l x_i angle.r = integral_0^1 rho(x) x d x
+//$ <eq:part13>
+//
+//The transition dipole moment between two states
+//$i$ and $j$ is defined as shown in @eq:part14.
+//
+//$
+//angle.l x_(i j) angle.r = integral_0^1 psi_i(x) x psi_j(x) d x
+//$ <eq:part14>
+//
+//The table @fig:table1 shows the 
+//dipole moment for the first state and the transition dipole 
+//between the ground and first excited state.
+//
+// #figure(
+//   table( columns: (auto, auto), inset: 10pt, align: center, 
+// [$(i,j)$], [$angle.l x angle.r_(Psi^2)$],
+// [(1,1)], [ 0.000489237   ],
+// [(1,2)], [-0.180655      ],
+// [(1,3)], [ 0.0           ],
+// [(2,2)], [ 0.000489237   ],
+// [(2,3)], [ 0.195108      ],
+// ),
+//   caption: [The dipole moment and transition dipole moment
+//between the pairs of states shown in the first column.],
+// ) <fig:table1>
  
 
 
